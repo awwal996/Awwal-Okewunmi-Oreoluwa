@@ -17,13 +17,13 @@
   <!-- Preload critical font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
   
   <!-- Load styles -->
   <link rel="stylesheet" href="src/style.css">
   
   <!-- Load Three.js from CDN (not async so it's ready when module loads) -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 </head>
 <body>
   <canvas id="bg" aria-hidden="true"></canvas>
@@ -31,5 +31,6 @@
     <!-- Content loaded by JavaScript -->
   </main>
   <script type="module" src="/src/main-cdn.js"></script>
+  <script src="/src/scene-cdn.js"></script>
 </body>
 </html>

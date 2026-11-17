@@ -1,23 +1,42 @@
-import { initScene } from './scene-cdn.js';
 import { content } from './content.js';
+import { fetchAllContent } from './supabase.js';
 
 /**
- * Main Application (CDN Version)
+ * Main Application (CDN Version with Supabase)
  * Handles DOM rendering and user interactions
  */
 
 class PortfolioApp {
   constructor() {
     this.app = document.getElementById('app');
+    this.content = content; // Start with static content
     this.init();
   }
 
-  init() {
-    // Render all sections first
-    this.render();
+  async init() {
+    try {
+      // Show loading state
+      this.app.innerHTML = '<div class="loading">Loading portfolio...</div>';
+      
+      // Try to load from Supabase
+      const dynamicContent = await fetchAllContent();
+      
+      // Merge Supabase data with static content
+      if (dynamicContent.projects) {
+        this.content.projects = dynamicContent.projects;
+      }
+      if (dynamicContent.websites) {
+        this.content.websites = dynamicContent.websites;
+      }
+      if (dynamicContent.testimonials) {
+        this.content.testimonials = dynamicContent.testimonials;
+      }
+    } catch (error) {
+      console.warn('Could not load from Supabase, using static content:', error);
+    }
     
-    // Initialize 3D scene after DOM is ready
-    initScene();
+    // Always render, even if Supabase fails
+    this.render();
   }
 
   render() {
@@ -42,9 +61,9 @@ class PortfolioApp {
     return `
       <section class="hero" id="hero">
         <div class="hero-content">
-          <div class="hero-role">${content.role}</div>
-          <h1>${content.name}</h1>
-          <p class="hero-tagline">${content.tagline}</p>
+          <div class="hero-role">${this.content.role}</div>
+          <h1>${this.content.name}</h1>
+          <p class="hero-tagline">${this.content.tagline}</p>
           <div class="hero-buttons">
             <a href="#work" class="btn btn-primary">See my work</a>
             <a href="#contact" class="btn btn-secondary">Hire me</a>
@@ -60,14 +79,15 @@ class PortfolioApp {
   renderAbout() {
     return `
       <section class="about" id="about">
+        <span class="section-label">01 / ABOUT</span>
         <h2>About Me</h2>
-        <p>${content.about}</p>
+        <p>${this.content.about}</p>
       </section>
     `;
   }
 
   renderWork() {
-    const projectCards = content.projects.map(project => `
+    const projectCards = this.content.projects.map(project => `
       <article class="project-card">
         <h3 class="project-title">${project.title}</h3>
         
@@ -96,6 +116,7 @@ class PortfolioApp {
 
     return `
       <section id="work">
+        <span class="section-label">02 / WORK</span>
         <h2>My Work</h2>
         <div class="projects-grid">
           ${projectCards}
@@ -106,11 +127,11 @@ class PortfolioApp {
 
   renderWebsites() {
     // Hide section if no websites
-    if (!content.websites || content.websites.length === 0) {
+    if (!this.content.websites || this.content.websites.length === 0) {
       return '';
     }
 
-    const websiteCards = content.websites.map(site => `
+    const websiteCards = this.content.websites.map(site => `
       <article class="website-card">
         <div class="website-image-wrapper">
           <img 
@@ -140,6 +161,7 @@ class PortfolioApp {
 
     return `
       <section id="websites">
+        <span class="section-label">03 / WEBSITES</span>
         <h2>Websites I've Built</h2>
         <div class="websites-grid">
           ${websiteCards}
@@ -151,13 +173,14 @@ class PortfolioApp {
   renderPromptLab() {
     return `
       <section id="prompt-lab">
+        <span class="section-label">04 / PROMPT LAB</span>
         <h2>Prompt Lab</h2>
         <p>See how thoughtful prompt engineering transforms AI outputs from generic to precise.</p>
         
         <div class="prompt-lab-container">
           <div class="lab-controls">
             <div class="example-selector" role="tablist" aria-label="Select prompt example">
-              ${content.promptLab.map((example, index) => `
+              ${this.content.promptLab.map((example, index) => `
                 <button 
                   class="example-btn ${index === 0 ? 'active' : ''}" 
                   data-example="${index}"
@@ -172,7 +195,6 @@ class PortfolioApp {
             </div>
             
             <div class="lab-toggle">
-              <span style="font-weight: 600; margin-right: 0.5rem;">View:</span>
               <button class="toggle-btn active" data-view="comparison" aria-pressed="true">
                 Comparison
               </button>
@@ -194,7 +216,7 @@ class PortfolioApp {
   }
 
   renderWorkflow() {
-    const steps = content.workflow.map(step => `
+    const steps = this.content.workflow.map(step => `
       <div class="workflow-step">
         <div class="step-number" aria-hidden="true">${step.step}</div>
         <div class="step-content">
@@ -206,6 +228,7 @@ class PortfolioApp {
 
     return `
       <section id="how-i-work">
+        <span class="section-label">05 / HOW I WORK</span>
         <h2>How I Work</h2>
         <div class="workflow-steps">
           ${steps}
@@ -215,11 +238,12 @@ class PortfolioApp {
   }
 
   renderSkills() {
-    const skillsList = content.skills.map(skill => `<li>${skill}</li>`).join('');
-    const toolsList = content.tools.map(tool => `<li>${tool}</li>`).join('');
+    const skillsList = this.content.skills.map(skill => `<li>${skill}</li>`).join('');
+    const toolsList = this.content.tools.map(tool => `<li>${tool}</li>`).join('');
 
     return `
       <section id="skills">
+        <span class="section-label">06 / SKILLS & TOOLS</span>
         <h2>Skills & Tools</h2>
         <div class="skills-container">
           <div>
@@ -240,11 +264,11 @@ class PortfolioApp {
   }
 
   renderTestimonials() {
-    if (!content.testimonials || content.testimonials.length === 0) {
+    if (!this.content.testimonials || this.content.testimonials.length === 0) {
       return '';
     }
 
-    const testimonialCards = content.testimonials.map(testimonial => `
+    const testimonialCards = this.content.testimonials.map(testimonial => `
       <article class="testimonial-card">
         <p class="testimonial-text">"${testimonial.text}"</p>
         <div class="testimonial-author">${testimonial.name}</div>
@@ -254,6 +278,7 @@ class PortfolioApp {
 
     return `
       <section id="testimonials">
+        <span class="section-label">07 / TESTIMONIALS</span>
         <h2>Testimonials</h2>
         <div class="testimonials-grid">
           ${testimonialCards}
@@ -264,24 +289,25 @@ class PortfolioApp {
 
   renderContact() {
     const socialLinks = [];
-    if (content.social.linkedin) {
-      socialLinks.push(`<a href="${content.social.linkedin}" class="social-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>`);
+    if (this.content.social.linkedin) {
+      socialLinks.push(`<a href="${this.content.social.linkedin}" class="social-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>`);
     }
-    if (content.social.github) {
-      socialLinks.push(`<a href="${content.social.github}" class="social-link" target="_blank" rel="noopener noreferrer">GitHub</a>`);
+    if (this.content.social.github) {
+      socialLinks.push(`<a href="${this.content.social.github}" class="social-link" target="_blank" rel="noopener noreferrer">GitHub</a>`);
     }
 
     return `
       <section id="contact">
         <div class="contact-container">
+          <span class="section-label">08 / CONTACT</span>
           <h2>Let's Work Together</h2>
           <p>Ready to improve your AI results? Get in touch.</p>
           
           <div class="contact-methods">
-            <a href="mailto:${content.email}" class="btn btn-primary">
+            <a href="mailto:${this.content.email}" class="btn btn-primary">
               Email me
             </a>
-            ${content.whatsapp.map(wa => {
+            ${this.content.whatsapp.map(wa => {
               const message = wa.message ? `?text=${encodeURIComponent(wa.message)}` : '';
               return `
                 <a href="https://wa.me/${wa.formatted}${message}" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
@@ -349,7 +375,7 @@ class PortfolioApp {
     let currentView = 'comparison';
 
     const updateComparison = () => {
-      const example = content.promptLab[currentExample];
+      const example = this.content.promptLab[currentExample];
       const container = document.getElementById('prompt-comparison');
 
       let html = '';
@@ -429,7 +455,7 @@ class PortfolioApp {
         `Name: ${name}\n\nProject Details:\n${needs}\n\n${budget ? `Budget: ${budget}\n\n` : ''}---\nSent from okewunmi-portfolio.com`
       );
       
-      window.location.href = `mailto:${content.email}?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:${this.content.email}?subject=${subject}&body=${body}`;
     });
   }
 

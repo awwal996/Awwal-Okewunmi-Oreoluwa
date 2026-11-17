@@ -45,7 +45,7 @@ export const content = {
     {
       title: "VeLogo",
       url: "https://velogo.lovable.app",
-      image: "https://velogo.lovable.app/og-image.png",
+      image: "/images/sites/velogo.png",
       description: "A restaurant delivery web app for ordering authentic Nigerian dishes delivered hot and fresh to your doorstep.",
       role: "Designed and built",
       tools: ["Lovable AI"]
