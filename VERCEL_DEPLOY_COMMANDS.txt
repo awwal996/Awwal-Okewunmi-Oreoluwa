@@ -1,0 +1,157 @@
+================================================================================
+  VERCEL DEPLOYMENT - COMMAND REFERENCE
+================================================================================
+
+YOUR CODE IS COMMITTED AND READY TO DEPLOY!
+
+================================================================================
+  STEP 1: CREATE GITHUB REPOSITORY
+================================================================================
+
+1. Go to: https://github.com/new
+
+2. Repository settings:
+   Name: okewunmi-portfolio
+   Visibility: Public
+   DO NOT initialize with README
+
+3. Click "Create repository"
+
+4. Copy your repository URL (example):
+   https://github.com/YOUR_USERNAME/okewunmi-portfolio.git
+
+================================================================================
+  STEP 2: PUSH TO GITHUB
+================================================================================
+
+Run these commands in PowerShell:
+
+cd "c:\Users\HP\OneDrive\Documents\3d web"
+
+# Add GitHub as remote (REPLACE YOUR_USERNAME with your actual username)
+git remote add origin https://github.com/YOUR_USERNAME/okewunmi-portfolio.git
+
+# Push to GitHub
+git push -u origin master
+
+AUTHENTICATION:
+- Username: Your GitHub username
+- Password: Use Personal Access Token (NOT your password)
+  Get token at: https://github.com/settings/tokens
+  - Generate new token (classic)
+  - Select "repo" scope
+  - Copy token and paste as password
+
+================================================================================
+  STEP 3: DEPLOY ON VERCEL
+================================================================================
+
+1. Go to: https://vercel.com
+
+2. Click "Continue with GitHub" (sign up/login)
+
+3. Click "Add New..." → "Project"
+
+4. Find "okewunmi-portfolio" → Click "Import"
+
+5. Configure project:
+   Framework Preset: Vite (auto-detected)
+   Build Command: npm run build
+   Output Directory: dist
+   
+6. Click "Deploy"
+
+7. Wait 1-2 minutes...
+
+8. DONE! Your portfolio is live! 🎉
+
+YOUR LIVE URL:
+https://okewunmi-portfolio.vercel.app
+(or your chosen project name)
+
+================================================================================
+  FUTURE UPDATES
+================================================================================
+
+After deployment, to update your live site:
+
+git add .
+git commit -m "Update content"
+git push
+
+Vercel will automatically redeploy!
+
+================================================================================
+  HELPFUL COMMANDS
+================================================================================
+
+# Check git status
+git status
+
+# View remote repository
+git remote -v
+
+# Check last commit
+git log --oneline -1
+
+# View your Vercel deployments
+vercel ls
+
+================================================================================
+  TROUBLESHOOTING
+================================================================================
+
+ISSUE: Can't push to GitHub
+FIX: Use Personal Access Token, not password
+     Get token: https://github.com/settings/tokens
+
+ISSUE: Build failed on Vercel
+FIX: Test build locally first:
+     npm run build
+     
+ISSUE: Wrong GitHub remote
+FIX: Remove and re-add:
+     git remote remove origin
+     git remote add origin <YOUR_REPO_URL>
+
+================================================================================
+  FILES INCLUDED IN DEPLOYMENT
+================================================================================
+
+✓ index.html - Main page
+✓ src/main-cdn.js - App logic (fixed, no duplicates)
+✓ src/scene-cdn.js - 3D scene
+✓ src/style.css - Cinematic styling
+✓ src/content.js - Portfolio content
+✓ src/supabase.js - Database connection
+✓ images/ - All images
+✓ vercel.json - Vercel configuration
+✓ package.json - Dependencies
+✓ vite.config.js - Build configuration
+
+================================================================================
+  AFTER DEPLOYMENT
+================================================================================
+
+✓ Share your URL on LinkedIn
+✓ Add to resume/CV
+✓ Include in email signature
+✓ Update content via Supabase dashboard
+✓ Monitor traffic in Vercel dashboard
+✓ Add custom domain (optional)
+
+================================================================================
+  NEED MORE HELP?
+================================================================================
+
+DETAILED GUIDE: See DEPLOY_TO_VERCEL.md
+VERCEL DOCS: https://vercel.com/docs
+GITHUB HELP: https://docs.github.com
+
+================================================================================
+
+READY TO DEPLOY? Follow the 3 steps above!
+
+Your portfolio will be live in 10 minutes! 🚀
+
+================================================================================
